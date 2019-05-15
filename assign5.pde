@@ -596,7 +596,7 @@ boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float 
 
 String convertFramesToTimeString(int frames){	// Requirement #4
   String second=nf(floor(frames/60)%60,2);
-  String minute=nf(frames/60/60,2);
+  String minute=nf(floor(frames/60/60),2);
   
 	return minute + ":" + second;
 }
