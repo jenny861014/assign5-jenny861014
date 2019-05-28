@@ -179,8 +179,6 @@ void initSoldiers(){
 	for(int i = 0; i < soldierX.length; i++){
 		soldierX[i] = random(-SOIL_SIZE, width);
 		soldierY[i] = SOIL_SIZE * ( i * 4 + floor(random(4)));
-    cautionX = soldierX[i];
-    cautionY = soldierY[i]-80;
 	}
 }
 
@@ -443,9 +441,6 @@ void draw() {
 
 			soldierX[i] += soldierSpeed;
 			if(soldierX[i] >= width) soldierX[i] = -SOIL_SIZE;
-      cautionX = soldierX[i];
-      cautionY = soldierY[i]-80;
-      image(caution, cautionX, cautionY);
 			image(soldier, soldierX[i], soldierY[i]);
 
 			// Requirement #3: Use boolean isHit(...) to detect collision
@@ -611,9 +606,15 @@ int getEnemyIndexByRow(int row){				// Requirement #6
 		// - If there's a soldier in that row, return that soldier's index in soldierX/soldierY
 		// (for example, if soldierY[3] is in that row, return 3)
 		// - Return -1 if there's no soldier in that row
-  int y=row/SOIL_SIZE;
-  if(soldierY[y] == playerRow+4){
-	  return row; } else { return -1; }
+  int y= (row+5);
+  int areaIdex = -1;
+  for(int i=0 ; i<soldierY.length ; i++){
+    if(soldierY[i]/SOIL_SIZE == y){
+      areaIdex = i;
+	   }
+  }
+  return areaIdex;
+
 }
 
 void drawCaution(){								// Requirement #6
@@ -624,12 +625,9 @@ void drawCaution(){								// Requirement #6
 		// - Use playerRow to calculate the row below the screen
 		// - Use the returned value from int getEnemyIndexByRow(int row) to get the soldier's position from soldierX/soldierY arrays
 		// - Don't draw anything if int getEnemyIndexByRow(int row) returns -1
-  if(getEnemyIndexByRow(playerRow+4) == -1){
-    cautionX = -1000;
-    cautionY = -1000;}else{
-  cautionX = soldierX[getEnemyIndexByRow(playerRow+4)];
-  cautionY = soldierY[getEnemyIndexByRow(playerRow+3)];
-  image(caution, cautionX, cautionY);}
+  if(getEnemyIndexByRow(playerRow) >= 0){
+      image(caution, soldierX[getEnemyIndexByRow(playerRow)], soldierY[getEnemyIndexByRow(playerRow)] - SOIL_SIZE);
+    }
 }
 
 void keyPressed(){
